@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <title>User Login</title>
+    <link rel="stylesheet" href="userloginstyle.css" />
+    <script src="loginscript.js" defer></script>
+</head>
+
+<body>
+    <h1>User Login</h1>
+    
+    <form method="post" action='' id="loginform">
+        <fieldset>
+            <label for="email">Enter Your Email: <input id="email" name="email" type="email" class= "email" required /></label>
+            <label for="password">Enter Password: <input id="password" name="password" class="password"
+                    type="password" pattern="[a-zA-Z0-9!@#$%^&*]{8,}" required /></label>
+        </fieldset>
+        
+        <div class= "loginbox"><button>Login</button></div>
+     
+    </form>
+</body>
+
+<footer>
+    <p type="signup">Don't Have an account? Sign Up <a href="UserSignup.html">Here</a></p>
+    <p> <a href="Homepage.html" name="homepage">Homepage</a> </p><br>
+</footer>
+
+</html>
