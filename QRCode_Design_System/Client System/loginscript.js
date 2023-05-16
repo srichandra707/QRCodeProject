@@ -1,13 +1,13 @@
 
 document
     .querySelector('#loginForm button')
-    .addEventListener('click', doLogin);
+    .addEventListener('click', doLogin); //defining click as the spark event
 
 function doLogin(event) {
-    event.preventDefault();
+    event.preventDefault(); //stops pa  ge from reloading
     console.log('Send a login request');
-    let mail = document.querySelector('#loginForm .email').value;
-    let pass = document.querySelector('#loginForm .password').value;
+    let mail = document.querySelector('#loginForm .email').value; //getting email val
+    let pass = document.querySelector('#loginForm .password').value; //getting passwd val
     //Form validation
     let user = { email: em, password: pass };
     let endpoint = 'login';
