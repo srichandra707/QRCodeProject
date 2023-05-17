@@ -1,52 +1,59 @@
 
 document
-    .querySelector('#loginForm button')
+    .querySelector('#loginform button')
     .addEventListener('click', doLogin); //defining click as the spark event
 
 function doLogin(event) {
-    event.preventDefault(); //stops pa  ge from reloading
+    event.preventDefault(); //stops page from reloading
     console.log('Send a login request');
-    let mail = document.querySelector('#loginForm .email').value; //getting email val
-    let pass = document.querySelector('#loginForm .password').value; //getting passwd val
+
+    let emailElement = document.querySelector('#loginform .email').value; //getting email val
+    let passwordElement = document.querySelector('#loginform .password').value; //getting passwd val
+
+    console.log('email: ', emailElement);
+    console.log('password', passwordElement);
+
+    if (!emailElement || !passwordElement) {
+        console.log('One of the elements could not be found');
+        return;
+    }
+
     //Form validation
-    let user = { email: em, password: pass };
-    let endpoint = 'login';
+    let user = { email: emailElement, password: passwordElement};
+    let endpoint = 'UserLogin';
     sendData(user, endpoint, loginSuccess);
 }
 
-function sendData(user, endpoint, callback) {
-    let url = `http://localhost:4000/${endpoint}`;
+async function sendData(user, endpoint, callback) {
+    let url = `http://localhost:5665/${endpoint}`;
     let h = new Headers();
     h.append('Content-Type', 'application/json');
+
+    console.log('Sending data:',user);
+
     let req = new Request(url, {
-        method: 'POST',
+        method: 'POST',   //for uploading the body
         headers: h,
         body: JSON.stringify(user),
     });
-    fetch(req)
-        .then((res) => res.json())
-        .then((content) => {
+    fetch(req) //uploading request object then getting the response object back from the server
+        .then((res) => res.json())  //assuming we're gonna recieve a json object(could be error or success)
+        .then((content) => {        //content = object created from json
             //we have a response
-            if ('error' in content) {
-                //bad attempt
-                failure(content.error);
-            }
-            if ('data' in content) {
-                //it worked
-                callback(content.data);
+            if ('message' in content) {
+                failure(content.message);
             }
         })
-        .catch(failure);
+        .catch(failure); //network error, couldn't get a proper json object, or just couldnt upload the intial details
 }
 
 function loginSuccess(data) {
     //we have a token so put it in localstorage
-    console.log('token', data.token);
-    sessionStorage.setItem('myapp-token', data.token);
+    
     alert('You are logged in');
 }
 
-function failure(err) {
-    alert(err.message);
-    console.warn(err.code, err.message);
+function failure(message) {
+    alert(message);
+    console.warn(message);
 }

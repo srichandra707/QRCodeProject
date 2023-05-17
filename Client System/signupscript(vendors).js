@@ -64,6 +64,7 @@ async function sendData(vendor) {
 function registerSuccess(data) {
     console.log('new user created', data);
     alert('You have been registered');
+    window.location.href = 'VendorHomepage.html';
 }
 
 function failure(err) {

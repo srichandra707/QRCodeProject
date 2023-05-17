@@ -6,13 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <title>User Login</title>
     <link rel="stylesheet" href="userloginstyle.css" />
-    <script src="loginscript.js" defer></script>
+    
 </head>
 
 <body>
     <h1>User Login</h1>
     
-    <form method="post" action='' id="loginform">
+    <form method="post" action='/UserLogin' id="loginform">
         <fieldset>
             <label for="email">Enter Your Email: <input id="email" name="email" type="email" class= "email" required /></label>
             <label for="password">Enter Password: <input id="password" name="password" class="password"
@@ -22,6 +22,7 @@
         <div class= "loginbox"><button>Login</button></div>
      
     </form>
+    <script src="loginscript.js" defer></script>
 </body>
 
 <footer>

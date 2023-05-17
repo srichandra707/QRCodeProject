@@ -1,4 +1,6 @@
-document.querySelector('#signupform button').addEventListener('click', doSignup);
+document
+    .querySelector('#signupform button')
+    .addEventListener('click', doSignup);
 
 function doSignup(event) {
   event.preventDefault();
@@ -64,6 +66,7 @@ async function sendData(user) {
 function registerSuccess(data) {
     console.log('new user created', data);
     alert('You have been registered');
+    window.location.href = 'UserHomepage.html';
 }
 
 function failure(err) {

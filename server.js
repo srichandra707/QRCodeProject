@@ -2,7 +2,7 @@
 const express = require('express');
 const server = express();
 const cors = require('cors'); //cross origin resource sharing- allows a request from one origin to another
-
+const session = require('express-session');
 
 
 /*fetch(sends a request to server to retrieve data) then middleware like
@@ -18,7 +18,8 @@ const port = 5665;
 
 //getting bcrypt for hashing and encryption
 const bcrypt = require('bcrypt');
-const saltRounds = 5;
+const saltRounds = 10;
+
 
 //getting mongodb modules and initialization
 const mongoose = require('mongoose');
@@ -33,9 +34,9 @@ const Vendor = require('./mongo');
 server.use(cors()); //can take requests from any origiin because of * proprerty.
 server.use(express.static("Client System")); //serving static files from the client side
 server.use(bodyParser.json()); //easily handle JSON data sent in the request body.
-                               //It automatically parses the JSON and converts it into a 
-                               //JavaScript object, allowing you to access and manipulate 
-                               //the data easily using req.body.
+//It automatically parses the JSON and converts it into a 
+//JavaScript object, allowing you to access and manipulate 
+//the data easily using req.body.
 
 //connecting to MongoDB
 mongoose.connect('mongodb+srv://lollasrichandra9:1Srichandra9*@cluster.auuzrze.mongodb.net/E-Coupons', { useNewUrlParser: true, useUnifiedTopology: true })
@@ -44,7 +45,7 @@ mongoose.connect('mongodb+srv://lollasrichandra9:1Srichandra9*@cluster.auuzrze.m
     })
     .catch((error) => {
         console.error('Error connecting to MongoDB: ', error);
-});
+    });
 
 
 //Hashing passwords and handling signup
@@ -117,7 +118,61 @@ const handleSignup2 = async (req, res) => {
 server.post('/UserSignup', handleSignup1);
 server.post('/VendorSignup', handleSignup2);
 
+server.use(session({
+    secret: 'your secret key',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false }
+  }));
+  
 
+
+//Handling Login
+server.post('/UserLogin', async (req, res) => {
+    const { email, password } = req.body;
+    console.log('Login attempt:', email, password);
+
+    
+
+    //checking if email exists
+    const user = await mongoose.models.User.findOne({ email });
+    //log user returned from database
+    
+
+    if (!user) {
+        return res.status(404).json({ message: "No user found with this email.Please create an account." });
+    }
+    console.log('User found: ', user);
+
+    
+    //check if password is correct
+    const passwordMatch = await bcrypt.compare(password, user.password);
+
+    //log password comparision
+    console.log('Passwords match', passwordMatch);
+
+    if (!passwordMatch) {
+        return res.status(401).json({ message: "Incorrect email/password." });
+    }
+
+    //user is authenticated, now saving into session
+    req.session.email = email;
+
+    return res.status(200).json({ message: "Logged in successfully" });
+});
+
+server.get('/logout', function (req, res, next) {
+    if (req.session) {
+        // delete session object
+        req.session.destroy(function (err) {
+            if (err) {
+                return next(err);
+            } else {
+                return res.redirect('/');
+            }
+        });
+    }
+});
 
 
 //Server listening at port 5665
