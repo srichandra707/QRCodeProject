@@ -4,25 +4,25 @@ function doSignup(event) {
   event.preventDefault();
   console.log('Send a Signup request');
 
-  let firstname = document.querySelector('#signupform .firstname');
-  let lastname = document.querySelector('#signupform .lastname');
+  let Firstname = document.querySelector('#signupform .firstname');
+  let Lastname = document.querySelector('#signupform .lastname');
   let emailElement = document.querySelector('#signupform .email');
   let passwordElement = document.querySelector('#signupform .password');
   let confirm_passwordElement = document.querySelector('#signupform .reenter-password');
 
-  console.log('first-name: ', firstname);
-  console.log('last-name', lastname);
+  console.log('first-name: ', Firstname);
+  console.log('last-name', Lastname);
   console.log('Email element:', emailElement);
   console.log('Password element:', passwordElement);
   console.log('Confirm password element:', confirm_passwordElement);
 
-  if (!emailElement || !passwordElement || !confirm_passwordElement || !firstname || !lastname) {
+  if (!emailElement || !passwordElement || !confirm_passwordElement || !Firstname || !Lastname) {
       console.log('One of the elements could not be found');
       return;
   }
 
-  let firstName = firstname.value;
-  let lastName = lastname.value;
+  let firstName = Firstname.value;
+  let lastName = Lastname.value;
   let email = emailElement.value;
   let password = passwordElement.value;
   let confirm_password = confirm_passwordElement.value;
@@ -33,31 +33,33 @@ function doSignup(event) {
       return;
   }
 
-  let user = {firstName, lastName, email, password, confirmPassword: confirm_password };
+  let vendor = {firstName, lastName, email, password, confirmPassword: confirm_password };
 
-  sendData(user)
+  sendData(vendor)
       .then(registerSuccess)
       .catch(failure);
 }
 
 
-async function sendData(user) {
-    let url = 'http://localhost:5665/UserSignup';
+async function sendData(vendor) {
+    let url = 'http://localhost:5665/VendorSignup';
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
 
     let response = await fetch(url, {
         method: 'POST',
         headers,
-        body: JSON.stringify(user),
+        body: JSON.stringify(vendor),
     });
 
     if (!response.ok) {
-        throw new Error('Network response was not ok');
+        let message = await response.json(); // Get the error message from the server
+        throw new Error(message.message); // Throw an error with the message
     }
 
     return response.json();
 }
+
 
 function registerSuccess(data) {
     console.log('new user created', data);
@@ -65,6 +67,12 @@ function registerSuccess(data) {
 }
 
 function failure(err) {
-    alert(err.message);
-    console.warn(err.code, err.message);
+    if (err.message === 'Already registered! Please login!') {
+        alert(err.message);
+        window.location.href = 'VendorLogin.html'; // Redirect to login page
+    } else {
+        alert(err.message);
+        console.warn(err.code, err.message);
+    }
 }
+

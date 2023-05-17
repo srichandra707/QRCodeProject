@@ -24,6 +24,8 @@ const saltRounds = 5;
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const User = require('./mongo');
+const Vendor = require('./mongo');
+
 
 
 
@@ -46,7 +48,7 @@ mongoose.connect('mongodb+srv://lollasrichandra9:1Srichandra9*@cluster.auuzrze.m
 
 
 //Hashing passwords and handling signup
-const handleSignup = async (req, res) => {
+const handleSignup1 = async (req, res) => {
     console.log('Received request body: ', req.body); // Log the request body
 
     const { firstName, lastName, email, password, confirmPassword } = req.body;
@@ -59,7 +61,7 @@ const handleSignup = async (req, res) => {
         console.log('Hashing password...'); // Log before hashing the password
         const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-        console.log('Creating new user...'); // Log before creating new user
+        console.log('Creating new User...'); // Log before creating new user
         const user = new mongoose.models.User({ firstName, lastName, email, password: hashedPassword });
 
         console.log('Saving user...'); // Log before saving the user
@@ -78,11 +80,42 @@ const handleSignup = async (req, res) => {
     }
 };
 
+const handleSignup2 = async (req, res) => {
+    console.log('Received request body: ', req.body); // Log the request body
+
+    const { firstName, lastName, email, password, confirmPassword } = req.body;
+
+    if (password !== confirmPassword) {
+        return res.status(400).json({ message: 'Passwords do not match' });
+    }
+
+    try {
+        console.log('Hashing password...'); // Log before hashing the password
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+        console.log('Creating new Vendor...'); // Log before creating new vendor
+        const vendor = new mongoose.models.Vendor({ firstName, lastName, email, password: hashedPassword });
+
+        console.log('Saving vendor...'); // Log before saving the vendor
+        await vendor.save();
+
+        console.log('Vendor registered successfully'); // Log after vendor is saved
+        return res.status(201).json({ message: 'Vendor registered successfully' });
+    } catch (error) {
+        console.error('Error registering vendor: ', error);
+        if (error.code === 11000) { // Check if it's a duplicate key error
+            return res.status(409).json({ message: 'Already registered! Please login!' });
+        } else if (error.name === 'ValidationError') {
+            return res.status(400).json({ message: error.message });
+        }
+        return res.status(500).json({ message: 'Error registering the vendor' });
+    }
+};
 
 
 
-server.post('/UserSignup', handleSignup);
-server.post('/VendorSignup', handleSignup);
+server.post('/UserSignup', handleSignup1);
+server.post('/VendorSignup', handleSignup2);
 
 
 
@@ -98,3 +131,4 @@ server.listen(port, function (err) {
 
 
 module.exports = User;
+module.exports = Vendor;
