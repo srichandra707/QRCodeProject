@@ -1,33 +1,42 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 
-const userSchema = new mongoose.Schema({
-    'firstname': {
+const UserSchema = new mongoose.Schema({
+    firstName:{
         type: String,
-        required: true,
-        match: /^[A-Za-z]+$/
+        required:true,
+        unique: false
     },
-    'lastname': {
+    lastName:{
         type: String,
-        required: true,
-        match: /^[A-Za-z]+$/
+        required:true,
+        unique: false
     },
     email: {
         type: String,
         required: true,
-        match: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-        validate: {
-            validator: function(email) {
-                return mongoose.models.User.findOne({email: email})
-                    .then ((user)=>!user);
-            },
-            message: 'Email already exists. '
-        }
+        unique: true
     },
     password: {
         type: String,
         required: true,
-        match: /^[a-zA-Z0-9!@#$%^&*]+$/
+        validate: {
+            validator: function(v) {
+                return /[a-zA-Z0-9!@#$%^&*]{8,}/.test(v);
+            },
+            message: props => 'Invalid password!'
+        }
     }
 });
 
-const User = mongoose.model('User', userSchema);
+UserSchema.pre('save', async function(next) {
+    const user = this;
+    if (user.isModified('password')) {
+        user.password = await bcrypt.hash(user.password, 10);
+    }
+    next();
+});
+
+const User = mongoose.model('User', UserSchema);
+
+module.exports = User;

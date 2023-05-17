@@ -5,28 +5,33 @@
     <meta charset="UTF-8">
     <title>User Signup</title>
     <link rel="stylesheet" href="usersignup.css" />
-    <script src="signupscript.js" defer></script>
+    
 </head>
 
 <body>
     <h1>User Signup</h1>
     <p name="required-info">Please fill out this form</p>
-    <form method="post" action='/UserSignup.html' id="signupform">
+    <form method="post" action='/UserSignup' id="signupform">
         <fieldset>
-            <label for="firstname">Enter Your First Name: <input id="firstname" name="firstname" type="text"
+            <label for="firstname">Enter Your First Name: <input id="firstname" name="firstname" type="text" class="firstname"
                     required /></label>
-            <label for="lastname">Enter Your Last Name: <input id="lastname" name="lastname" type="text"
+
+            <label for="lastname">Enter Your Last Name: <input id="lastname" name="lastname" type="text" class="lastname"
                     required /></label>
+
             <label for="email">Enter Your Email: <input id="email" name="email" type="email" class="email" required /></label>
+
             <label for="password">Create a New Password: <input id="password" name="password"
                     type="password" pattern="[a-zA-Z0-9!@#$%^&*]{8,}" class="password" required /></label>
+
             <label for="reenter-password">Re-enter New Password: <input id="reenter-password" name="reenter-password"
-                        type="password" pattern="[a-zA-Z0-9!@#$%^&*]{8,}" class="password" required /></label>
+                        type="password" pattern="[a-zA-Z0-9!@#$%^&*]{8,}" class="reenter-password" required /></label>
         </fieldset>
         
         <div class= "signupbox"><button>Signup</button></div>
         
     </form>
+<script src="signupscript(users).js" defer></script>
 </body>
 
 <footer>
