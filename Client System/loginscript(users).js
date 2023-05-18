@@ -40,17 +40,19 @@ async function sendData(user, endpoint, callback) {
         .then((res) => res.json())  //assuming we're gonna recieve a json object(could be error or success)
         .then((content) => {        //content = object created from json
             //we have a response
-            if ('message' in content) {
+            if ('message' in content && 'redirectUrl' in content) {
+                loginSuccess(content.redirectUrl);
+            }else if('message' in content){
                 failure(content.message);
             }
         })
         .catch(failure); //network error, couldn't get a proper json object, or just couldnt upload the intial details
 }
 
-function loginSuccess(data) {
+function loginSuccess(redirectUrl) {
     //we have a token so put it in localstorage
-    
     alert('You are logged in');
+    window.location.href = redirectUrl;
 }
 
 function failure(message) {

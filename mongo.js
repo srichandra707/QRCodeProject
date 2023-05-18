@@ -26,15 +26,17 @@ const UserSchema = new mongoose.Schema({
             },
             message: props => 'Invalid password!'
         }
+    },
+    money:{
+        type: Number,
+        required:false,
+        unique: false,
+        default: 0
     }
 });
 
 UserSchema.pre('save', async function(next) {
-    const user = this;
-    if (user.isModified('password')) {
-        user.password = await bcrypt.hash(user.password, 10);
-    }
-    next();
+    
 });
 
 const User = mongoose.model('User', UserSchema);
@@ -64,18 +66,20 @@ const VendorSchema = new mongoose.Schema({
             },
             message: props => 'Invalid password!'
         }
+    },
+    money:{
+        type: Number,
+        required:false,
+        unique: false,
+        default: 0
     }
+
 });
 
 VendorSchema.pre('save', async function(next) {
-    const vendor = this;
-    if (vendor.isModified('password')) {
-        vendor.password = await bcrypt.hash(vendor.password, 10);
-    }
-    next();
+    
 });
 
 const Vendor = mongoose.model('Vendor', VendorSchema);
 
-module.exports = User;
-module.exports = Vendor;
+module.exports = { User, Vendor};

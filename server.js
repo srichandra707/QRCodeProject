@@ -24,8 +24,7 @@ const saltRounds = 10;
 //getting mongodb modules and initialization
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const User = require('./mongo');
-const Vendor = require('./mongo');
+const {User, Vendor} = require('./mongo');
 
 
 
@@ -128,7 +127,7 @@ server.use(session({
 
 
 //Handling Login
-server.post('/UserLogin', async (req, res) => {
+const handleLogin1 = async (req, res) => {
     const { email, password } = req.body;
     console.log('Login attempt:', email, password);
 
@@ -158,8 +157,48 @@ server.post('/UserLogin', async (req, res) => {
     //user is authenticated, now saving into session
     req.session.email = email;
 
-    return res.status(200).json({ message: "Logged in successfully" });
-});
+    
+    return res.status(200).json({ message: "Logged in successfully", redirectUrl: "/UserHomepage.html" });
+    
+};
+
+const handleLogin2 = async (req, res) => {
+    const { email, password } = req.body;
+    console.log('Login attempt:', email, password);
+
+    
+
+    //checking if email exists
+    const vendor = await mongoose.models.Vendor.findOne({ email });
+    //log user returned from database
+    
+
+    if (!vendor) {
+        return res.status(404).json({ message: "No user found with this email.Please create an account." });
+    }
+    console.log('Vendor found: ', vendor);
+
+    
+    //check if password is correct
+    const passwordMatch = await bcrypt.compare(password, vendor.password);
+
+    //log password comparision
+    console.log('Passwords match', passwordMatch);
+
+    if (!passwordMatch) {
+        return res.status(401).json({ message: "Incorrect email/password." });
+    }
+
+    //user is authenticated, now saving into session
+    req.session.email = email;
+
+    
+    return res.status(200).json({ message: "Logged in successfully", redirectUrl: "/VendorHomepage.html" });
+    
+};
+
+server.post('/UserLogin', handleLogin1);
+server.post('/VendorLogin', handleLogin2);
 
 server.get('/logout', function (req, res, next) {
     if (req.session) {

@@ -8,7 +8,7 @@
 </head>
 <body>
     <div class="money-box">
-        <span>Money Left: 1000</span>
+        <span>Money Left:0</span>
     </div>
 
     <div class="mainbd">
@@ -17,10 +17,10 @@
         <div class="profile-info">
             <h2>User Profile</h2>
             <label for="name">Name:</label>
-            <input type="text" id="name" name="name" value="" readonly>
+            <input type="text" id="name" name="name" value='${firstName}' readonly>
 
             <label for="email">Email:</label>
-            <input type="email" id="email" name="" readonly>
+            <input type="email" id="email" name="email"  value ='${email}' readonly>
 
             <button class="qr-button"><a href="qr-scanner.html">Scan QR-code</a></button>
 
