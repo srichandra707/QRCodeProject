@@ -31,7 +31,7 @@ const UserSchema = new mongoose.Schema({
         type: Number,
         required:false,
         unique: false,
-        default: 0
+        default: 10000
     }
 });
 
@@ -71,7 +71,7 @@ const VendorSchema = new mongoose.Schema({
         type: Number,
         required:false,
         unique: false,
-        default: 0
+        default: 10000
     }
 
 });

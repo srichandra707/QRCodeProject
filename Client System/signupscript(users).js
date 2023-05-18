@@ -29,7 +29,7 @@ function doSignup(event) {
   let password = passwordElement.value;
   let confirm_password = confirm_passwordElement.value;
 
-  // Check if passwords match
+ 
   if (password !== confirm_password) {
       alert('Passwords do not match!');
       return;
@@ -72,7 +72,7 @@ function registerSuccess(data) {
 function failure(err) {
     if (err.message === 'Already registered! Please login!') {
         alert(err.message);
-        window.location.href = 'UserLogin.html'; // Redirect to login page
+        window.location.href = 'UserLogin.html'; 
     } else {
         alert(err.message);
         console.warn(err.code, err.message);

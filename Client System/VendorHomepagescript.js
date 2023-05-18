@@ -28,9 +28,29 @@ document.addEventListener("DOMContentLoaded", function(){
         window.location.href = "VendorLogin.html";
     }
 
-    const logoutButton = document.getElementById('logout-button');
-    logoutButton.addEventListener('click', ()=>{
-        localStorage.removeItem('email');
-    });
+   
    
 });
+
+
+document.getElementById('price').addEventListener('change', ()=> {
+    let price = document.getElementById('price').value;
+    let email = localStorage.getItem('email');
+    let transactionData = {
+        vendorEmail: email,
+        price: price,
+    };
+    let qr = new QRCode(document.querySelector('.qr-button'), {
+        text: JSON.stringify(transactionData),
+        width: 128,
+        height: 128
+    });
+    
+   
+});
+
+
+
+
+
+

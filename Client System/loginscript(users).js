@@ -46,11 +46,11 @@ async function sendData(user, endpoint, callback) {
                 failure(content.message);
             }
         })
-        .catch(failure); //network error, couldn't get a proper json object, or just couldnt upload the intial details
+        .catch(failure); // couldn't get a proper json object, or just couldnt upload the intial details
 }
 
 function loginSuccess(email, redirectUrl) {
-    //we have a token so put it in localstorage
+    
     alert('You are logged in');
     localStorage.setItem('email', email);
     window.location.href = redirectUrl;

@@ -50,7 +50,7 @@ mongoose.connect('mongodb+srv://lollasrichandra9:1Srichandra9*@cluster.auuzrze.m
 
 //Hashing passwords and handling signup
 const handleSignup1 = async (req, res) => {
-    console.log('Received request body: ', req.body); // Log the request body
+    
 
     const { firstName, lastName, email, password, confirmPassword } = req.body;
 
@@ -59,13 +59,13 @@ const handleSignup1 = async (req, res) => {
     }
 
     try {
-        console.log('Hashing password...'); // Log before hashing the password
+        
         const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-        console.log('Creating new User...'); // Log before creating new user
+        
         const user = new mongoose.models.User({ firstName, lastName, email, password: hashedPassword });
 
-        console.log('Saving user...'); // Log before saving the user
+        
         await user.save();
 
         console.log('User registered successfully'); // Log after user is saved
@@ -82,7 +82,7 @@ const handleSignup1 = async (req, res) => {
 };
 
 const handleSignup2 = async (req, res) => {
-    console.log('Received request body: ', req.body); // Log the request body
+    
 
     const { firstName, lastName, email, password, confirmPassword } = req.body;
 
@@ -91,13 +91,13 @@ const handleSignup2 = async (req, res) => {
     }
 
     try {
-        console.log('Hashing password...'); // Log before hashing the password
+        
         const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-        console.log('Creating new Vendor...'); // Log before creating new vendor
+        
         const vendor = new mongoose.models.Vendor({ firstName, lastName, email, password: hashedPassword });
 
-        console.log('Saving vendor...'); // Log before saving the vendor
+        
         await vendor.save();
 
         console.log('Vendor registered successfully'); // Log after vendor is saved
@@ -136,7 +136,7 @@ const handleLogin1 = async (req, res) => {
 
     //checking if email exists
     const user = await mongoose.models.User.findOne({ email });
-    //log user returned from database
+    
     
 
     if (!user) {
@@ -145,17 +145,17 @@ const handleLogin1 = async (req, res) => {
     console.log('User found: ', user);
 
     
-    //check if password is correct
+    
     const passwordMatch = await bcrypt.compare(password, user.password);
 
-    //log password comparision
+    
     console.log('Passwords match', passwordMatch);
 
     if (!passwordMatch) {
         return res.status(401).json({ message: "Incorrect email/password." });
     }
 
-    //user is authenticated, now saving into session
+    
     req.session.email = email;
 
     
@@ -171,7 +171,7 @@ const handleLogin2 = async (req, res) => {
 
     //checking if email exists
     const vendor = await mongoose.models.Vendor.findOne({ email });
-    //log user returned from database
+    
     
 
     if (!vendor) {
@@ -180,17 +180,17 @@ const handleLogin2 = async (req, res) => {
     console.log('Vendor found: ', vendor);
 
     
-    //check if password is correct
+    
     const passwordMatch = await bcrypt.compare(password, vendor.password);
 
-    //log password comparision
+    
     console.log('Passwords match', passwordMatch);
 
     if (!passwordMatch) {
         return res.status(401).json({ message: "Incorrect email/password." });
     }
 
-    //user is authenticated, now saving into session
+    
     req.session.email = email;
 
     
@@ -223,6 +223,29 @@ server.post('/vendor-data', async (req, res) => {
     }
     console.log('Vendor found: ', vendor);
     return res.status(200).json({ firstName: vendor.firstName, email: vendor.email, money: vendor.money });
+});
+
+
+server.post('/complete-transaction', async (req,res) => {
+    const { vendorEmail, userEmail, price } = req.body;
+
+    const vendor = await mongoose.models.Vendor.findOne({email:vendorEmail});
+    const user = await mongoose.models.User.findOne({email: userEmail});
+
+    if (!vendor || !user || user.money<price){
+        res.status(400).json({message: 'Transaction couldn\'t be completed' });
+        return;
+    }
+
+
+
+    user.money -= price;
+    vendor.money += price;
+
+    await user.save();
+    await vendor.save();
+
+    res.status(200).json({message: 'Transaction completed successfully'});
 });
 
 

@@ -27,7 +27,7 @@ function doSignup(event) {
   let password = passwordElement.value;
   let confirm_password = confirm_passwordElement.value;
 
-  // Check if passwords match
+  
   if (password !== confirm_password) {
       alert('Passwords do not match!');
       return;
@@ -54,7 +54,7 @@ async function sendData(vendor) {
 
     if (!response.ok) {
         let message = await response.json(); // Get the error message from the server
-        throw new Error(message.message); // Throw an error with the message
+        throw new Error(message.message); //  an error with the message
     }
 
     return response.json();
@@ -70,7 +70,7 @@ function registerSuccess(data) {
 function failure(err) {
     if (err.message === 'Already registered! Please login!') {
         alert(err.message);
-        window.location.href = 'VendorLogin.html'; // Redirect to login page
+        window.location.href = 'VendorLogin.html'; 
     } else {
         alert(err.message);
         console.warn(err.code, err.message);

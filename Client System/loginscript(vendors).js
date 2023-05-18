@@ -39,18 +39,18 @@ async function sendData(vendor, endpoint, callback) {
     fetch(req) //uploading request object then getting the response object back from the server
         .then((res) => res.json())  //assuming we're gonna recieve a json object(could be error or success)
         .then((content) => {        //content = object created from json
-            //we have a response
+            
             if ('message' in content && 'redirectUrl' in content) {
                 loginSuccess(vendor.email, content.redirectUrl);
             }else if('message' in content){
                 failure(content.message);
             }
         })
-        .catch(failure); //network error, couldn't get a proper json object, or just couldnt upload the intial details
+        .catch(failure); // couldn't get a proper json object, or just couldnt upload the intial details
 }
 
 function loginSuccess(email, redirectUrl) {
-    //we have a token so put it in localstorage
+    
     alert('You are logged in');
     localStorage.setItem('email', email);
     window.location.href = redirectUrl;

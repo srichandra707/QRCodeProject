@@ -5,10 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <title>Profile Page</title>
     <link rel="stylesheet" href="VendorHomepagestyle.css">
-    <script src="VendorHomepagescript.js"></script>
+    <script src="VendorHomepagescript.js" defer></script>
+    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js" defer></script>
+    
 </head>
 <body>
-    <div class="money-box">
+    <div class="money-box" id="balance">
         <span>Money Left:0</span>
     </div>
 
@@ -26,7 +28,8 @@
             <label for="price">Enter Price:</label>
             <input type="number" id="price" name="price">
 
-            <button class="qr-button"><a href="qrgenerator.html">Generate QR-code</a></button>
+            <button class="qr-button">Generate QR-code</button>
+            <div id="logout"><button id="logout-button"><a href = "Homepage.html">Logout</a></button></div>
         </div>
     </div>
 </body>
