@@ -5,9 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <title>Profile Page</title>
     <link rel="stylesheet" href="UserHomepagestyle.css">
+    <script src="UserHomepagescript.js" defer></script>
+    
 </head>
 <body>
-    <div class="money-box">
+    <div class="money-box" id = "balance">
         <span>Money Left:0</span>
     </div>
 
@@ -16,16 +18,18 @@
 
         <div class="profile-info">
             <h2>User Profile</h2>
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" value='${firstName}' readonly>
+            <label for="firstName">Name:</label>
+            <input type="text" id="firstName" name="firstName"  readonly>
 
             <label for="email">Email:</label>
-            <input type="email" id="email" name="email"  value ='${email}' readonly>
+            <input type="email" id="email" name="email" readonly>
 
             <button class="qr-button"><a href="qr-scanner.html">Scan QR-code</a></button>
-
+            <button id="logout-button"><a href = "Homepage.html">Logout</a></button>
         </div>
     </div>
+
+    
 </body>
 </html>
 

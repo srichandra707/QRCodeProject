@@ -41,7 +41,7 @@ async function sendData(user, endpoint, callback) {
         .then((content) => {        //content = object created from json
             //we have a response
             if ('message' in content && 'redirectUrl' in content) {
-                loginSuccess(content.redirectUrl);
+                loginSuccess(user.email, content.redirectUrl);
             }else if('message' in content){
                 failure(content.message);
             }
@@ -49,9 +49,10 @@ async function sendData(user, endpoint, callback) {
         .catch(failure); //network error, couldn't get a proper json object, or just couldnt upload the intial details
 }
 
-function loginSuccess(redirectUrl) {
+function loginSuccess(email, redirectUrl) {
     //we have a token so put it in localstorage
     alert('You are logged in');
+    localStorage.setItem('email', email);
     window.location.href = redirectUrl;
 }
 

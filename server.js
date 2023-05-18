@@ -5,6 +5,7 @@ const cors = require('cors'); //cross origin resource sharing- allows a request 
 const session = require('express-session');
 
 
+
 /*fetch(sends a request to server to retrieve data) then middleware like
 
  app.use( endpoint of server(to where it should be sent), function(req(request object), res(reponse object)) => 
@@ -200,6 +201,31 @@ const handleLogin2 = async (req, res) => {
 server.post('/UserLogin', handleLogin1);
 server.post('/VendorLogin', handleLogin2);
 
+
+
+server.post('/user-data', async (req, res) => {
+    const { email } = req.body;
+    console.log('Fetch user data attempt:', email);
+    const user = await mongoose.models.User.findOne({ email });
+    if (!user) {
+        return res.status(404).json({ message: "No user found with this email." });
+    }
+    console.log('User found: ', user);
+    return res.status(200).json({ firstName: user.firstName, email: user.email, money: user.money });
+});
+
+server.post('/vendor-data', async (req, res) => {
+    const { email } = req.body;
+    console.log('Fetch vendor data attempt:', email);
+    const vendor = await mongoose.models.Vendor.findOne({ email });
+    if (!vendor) {
+        return res.status(404).json({ message: "No vendor found with this email." });
+    }
+    console.log('Vendor found: ', vendor);
+    return res.status(200).json({ firstName: vendor.firstName, email: vendor.email, money: vendor.money });
+});
+
+
 server.get('/logout', function (req, res, next) {
     if (req.session) {
         // delete session object
@@ -207,12 +233,11 @@ server.get('/logout', function (req, res, next) {
             if (err) {
                 return next(err);
             } else {
-                return res.redirect('/');
+                return res.redirect('Homepage.html');
             }
         });
     }
 });
-
 
 //Server listening at port 5665
 server.listen(port, function (err) {
@@ -222,6 +247,7 @@ server.listen(port, function (err) {
     }
     console.log(`Listening on port ${port}`);
 });
+
 
 
 module.exports = User;
