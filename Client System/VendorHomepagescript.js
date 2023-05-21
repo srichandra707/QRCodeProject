@@ -28,6 +28,9 @@ document.addEventListener("DOMContentLoaded", function(){
         window.location.href = "VendorLogin.html";
     }
 
+    document.querySelector('#logout-button').addEventListener('click', ()=>{
+        localStorage.removeItem('email');
+    });
    
    
 });
@@ -40,6 +43,10 @@ document.getElementById('price').addEventListener('change', ()=> {
         vendorEmail: email,
         price: price,
     };
+    
+    let qrDiv = document.getElementById('qrcode');
+    qrDiv.innerHTML = "";
+
     let qr = new QRCode(document.querySelector('.qr-button'), {
         text: JSON.stringify(transactionData),
         width: 128,

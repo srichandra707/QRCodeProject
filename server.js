@@ -69,7 +69,7 @@ const handleSignup1 = async (req, res) => {
         await user.save();
 
         console.log('User registered successfully'); // Log after user is saved
-        return res.status(201).json({ message: 'User registered successfully' });
+        return res.status(201).json({ message: 'User registered successfully', redirectUrl: "/UserHomepage.html" });
     } catch (error) {
         console.error('Error registering user: ', error);
         if (error.code === 11000) { // Check if it's a duplicate key error
@@ -101,7 +101,7 @@ const handleSignup2 = async (req, res) => {
         await vendor.save();
 
         console.log('Vendor registered successfully'); // Log after vendor is saved
-        return res.status(201).json({ message: 'Vendor registered successfully' });
+        return res.status(201).json({ message: 'Vendor registered successfully', redirectUrl: "/VendorHomepage.html" });
     } catch (error) {
         console.error('Error registering vendor: ', error);
         if (error.code === 11000) { // Check if it's a duplicate key error
@@ -228,6 +228,7 @@ server.post('/vendor-data', async (req, res) => {
 
 server.post('/complete-transaction', async (req,res) => {
     const { vendorEmail, userEmail, price } = req.body;
+    console.log("Scanned data recieved");
 
     const vendor = await mongoose.models.Vendor.findOne({email:vendorEmail});
     const user = await mongoose.models.User.findOne({email: userEmail});

@@ -32,6 +32,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelector('.qr-button').addEventListener('click', () => {
         let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
         scanner.addListener('scan', function (content) {
+            
             readQRCode(content);
         });
         Instascan.Camera.getCameras().then(function (cameras) {
@@ -53,6 +54,7 @@ document.querySelector('#logout-button').addEventListener('click', ()=>{
 // This will be your qr code reading function
 function readQRCode(data) {
     let transactionData = JSON.parse(data);
+    transactionData.userEmail = localStorage.getItem('email');
     fetch('/complete-transaction', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', },
@@ -61,6 +63,7 @@ function readQRCode(data) {
         .then(response => response.json())
         .then(data => {
             if (data.message) {
+                console.log("QR code is scanned");
                 alert(data.message);
             }
             // Refresh the page to update the money left

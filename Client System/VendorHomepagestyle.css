@@ -69,5 +69,11 @@ body {
     margin: 2em auto;
 }
 
+#qrcode {
+    width: 128px;
+    height: 128px;
+    margin: 20px auto;
+}
+
 
 

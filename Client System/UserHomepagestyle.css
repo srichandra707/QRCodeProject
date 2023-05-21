@@ -73,6 +73,17 @@ body {
     padding: 20px;
     border-radius: 10px;
     margin-top: 2 em;
+    flex-basis: 70% ;
+}
+.scanner-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap; /* allow the content to wrap onto multiple lines if space is insufficient */
+}
+#logout {
+    flex-basis: 20%; 
+    text-align: center;
 }
 
 

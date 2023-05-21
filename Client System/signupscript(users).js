@@ -38,7 +38,7 @@ function doSignup(event) {
   let user = {firstName, lastName, email, password, confirmPassword: confirm_password };
 
   sendData(user)
-      .then(registerSuccess)
+      .then(data => registerSuccess(data, email,'/UserHomepage.html'))
       .catch(failure);
 }
 
@@ -63,10 +63,11 @@ async function sendData(user) {
 }
 
 
-function registerSuccess(data) {
+function registerSuccess(data, email,redirectUrl) {
     console.log('new user created', data);
     alert('You have been registered');
-    window.location.href = 'UserHomepage.html';
+    localStorage.setItem('email', email);
+    window.location.href = data.redirectUrl;
 }
 
 function failure(err) {
