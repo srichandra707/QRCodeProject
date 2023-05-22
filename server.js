@@ -25,7 +25,7 @@ const saltRounds = 10;
 //getting mongodb modules and initialization
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const {User, Vendor} = require('./mongo');
+const {User, Vendor, Transaction} = require('./mongo');
 
 
 
@@ -248,9 +248,24 @@ server.post('/complete-transaction', async (req,res) => {
     await vendor.save();
 
     res.status(200).json({message: 'Transaction completed successfully'});
+    const transaction = new Transaction({
+        userEmail,
+        vendorEmail,
+        price
+    });
+    transaction.save()
+    .then(()=>console.log('Transactoin saved successfully'))
+    .catch(err=> console.error(err));
+
+    res.json({success:true});
 });
 
-
+server.get('/get-transaction-history', (req,res)=>{
+    const userEmail = req.query.userEmail;
+    Transaction.fin({userEmail})
+    .then(trnsactions=>res.json(transactions))
+    .catch(err=>console.error(err));
+});
 server.get('/logout', function (req, res, next) {
     if (req.session) {
         // delete session object

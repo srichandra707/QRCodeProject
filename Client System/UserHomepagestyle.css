@@ -101,3 +101,10 @@ div[id="reader"]{
     width: 60%;
     margin: 0 auto;
 }
+
+button[id="transactions"]{
+    padding: auto;
+    text-align: center;
+    justify-content: left;
+    align-items: center;
+}

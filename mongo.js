@@ -2,14 +2,14 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
 const UserSchema = new mongoose.Schema({
-    firstName:{
+    firstName: {
         type: String,
-        required:true,
+        required: true,
         unique: false
     },
-    lastName:{
+    lastName: {
         type: String,
-        required:true,
+        required: true,
         unique: false
     },
     email: {
@@ -21,35 +21,35 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true,
         validate: {
-            validator: function(v) {
+            validator: function (v) {
                 return /[a-zA-Z0-9!@#$%^&*]{8,}/.test(v);
             },
             message: props => 'Invalid password!'
         }
     },
-    money:{
+    money: {
         type: Number,
-        required:false,
+        required: false,
         unique: false,
         default: 10000
     }
 });
 
-UserSchema.pre('save', async function(next) {
-    
+UserSchema.pre('save', async function (next) {
+
 });
 
 const User = mongoose.model('User', UserSchema);
 
 const VendorSchema = new mongoose.Schema({
-    firstName:{
+    firstName: {
         type: String,
-        required:true,
+        required: true,
         unique: false
     },
-    lastName:{
+    lastName: {
         type: String,
-        required:true,
+        required: true,
         unique: false
     },
     email: {
@@ -61,25 +61,46 @@ const VendorSchema = new mongoose.Schema({
         type: String,
         required: true,
         validate: {
-            validator: function(v) {
+            validator: function (v) {
                 return /[a-zA-Z0-9!@#$%^&*]{8,}/.test(v);
             },
             message: props => 'Invalid password!'
         }
     },
-    money:{
+    money: {
         type: Number,
-        required:false,
+        required: false,
         unique: false,
         default: 10000
     }
 
 });
 
-VendorSchema.pre('save', async function(next) {
-    
+VendorSchema.pre('save', async function (next) {
+
 });
 
 const Vendor = mongoose.model('Vendor', VendorSchema);
 
-module.exports = { User, Vendor};
+const transactionSchema = new mongoose.Schema({
+    userEmail: {
+        type: String,
+        required: true
+    },
+    vendorEmail: {
+        type: String,
+        required: true
+    },
+    price: {
+        type: Number,
+        required: true
+    },
+    timestamp: {
+        type: Date,
+        default: Date.now
+    }
+});
+
+module.exports = mongoose.model('Transaction', transactionSchema);
+
+module.exports = { User, Vendor };

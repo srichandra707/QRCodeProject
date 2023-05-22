@@ -36,12 +36,12 @@ document.addEventListener("DOMContentLoaded", function () {
     var vendorEmail;
     function onScanSuccess(decodedText, decodedResult) {
         vendorEmail = decodedText;
-        if (vendorEmail){
+        if (vendorEmail) {
             document.getElementById('scanner-result').innerText = `Vendor: ${vendorEmail}`;
             priceInput.style.display = 'block';
-            confirmButton.style.display ='block';
-        }else{
-            document.getElementById('scanner-result').innerText=`Invalid QR code`;
+            confirmButton.style.display = 'block';
+        } else {
+            document.getElementById('scanner-result').innerText = `Invalid QR code`;
 
         }
     }
@@ -50,22 +50,22 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     var html5QrcodeScanner = new Html5QrcodeScanner(
-        "reader", {fps:10,qrbox:250}, true)
+        "reader", { fps: 10, qrbox: 250 }, true)
 
-    scanButton.addEventListener('click', function() {
+    scanButton.addEventListener('click', function () {
         readerDiv.style.display = 'block';
         html5QrcodeScanner.render(onScanSuccess, onScanFailure);
     });
 
-    confirmButton.addEventListener('click', function(){
+    confirmButton.addEventListener('click', function () {
         var price = parseFloat(priceInput.value);
-        if(price<=0){
+        if (price <= 0) {
             alert('Price must be a positive Number');
             return;
         }
-        if(price){
+        if (price) {
             var userEmail = localStorage.getItem('email');
-            var transactionData ={
+            var transactionData = {
                 userEmail: userEmail,
                 vendorEmail: vendorEmail,
                 price: price
@@ -78,28 +78,53 @@ document.addEventListener("DOMContentLoaded", function () {
                 },
                 body: JSON.stringify(transactionData),
             })
-            .then(response => response.json())
-            .then(data => {
-                alert("Transaction completed!");
-                console.log('Transaction success: ',data);
-                location.reload();
-            })
-            .catch((error)=>{
-                console.error('Transaction error:', error);
-                alert("'Transaction error");
-            });
-        }else {
+                .then(response => response.json())
+                .then(data => {
+                    alert("Transaction completed!");
+                    console.log('Transaction success: ', data);
+
+                    fetch('add-transaction', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(transactionData),
+                    })
+                        .then(respons => response.json())
+                        .then(data => {
+                            console.log('Transaction history update success: ', data);
+                        })
+                        .catch((error) => {
+                            console.error('Transaction history update error:', error);
+                        });
+                    location.reload();
+                })
+                .catch((error) => {
+                    console.error('Transaction error:', error);
+                    alert("'Transaction error");
+                });
+        } else {
             alert('Please enter a price');
         }
     });
-    
-    
-    
-    
-document.querySelector('#logout-button').addEventListener('click', ()=>{
-    localStorage.removeItem('email');
+    document.querySelector('#transactions').addEventListener('click', () =>{
+        fetch('/get-transaction-history?userEmail=' + encodeURIComponent(email))
+  .then(response => response.json())
+  .then(transactions => {
+    // Display the transactions on the page
+    console.log(transactions);
+  })
+  .catch(error => console.error(error));
+
+    });
+
+
+
+    document.querySelector('#logout-button').addEventListener('click', () => {
+        localStorage.removeItem('email');
+    });
 });
-});
+
 
 
 
