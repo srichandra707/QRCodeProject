@@ -58,7 +58,11 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     confirmButton.addEventListener('click', function(){
-        var price = priceInput.value;
+        var price = parseFloat(priceInput.value);
+        if(price<=0){
+            alert('Price must be a positive Number');
+            return;
+        }
         if(price){
             var userEmail = localStorage.getItem('email');
             var transactionData ={
@@ -82,6 +86,7 @@ document.addEventListener("DOMContentLoaded", function () {
             })
             .catch((error)=>{
                 console.error('Transaction error:', error);
+                alert("'Transaction error");
             });
         }else {
             alert('Please enter a price');
