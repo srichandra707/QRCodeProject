@@ -3,7 +3,7 @@ const express = require('express');
 const server = express();
 const cors = require('cors'); //cross origin resource sharing- allows a request from one origin to another
 const session = require('express-session');
-
+const QRCode = require('qrcode');
 
 
 /*fetch(sends a request to server to retrieve data) then middleware like
@@ -96,7 +96,8 @@ const handleSignup2 = async (req, res) => {
 
         
         const vendor = new mongoose.models.Vendor({ firstName, lastName, email, password: hashedPassword });
-
+        const qrCodeData = await QRCode.toDataURL(email);
+        vendor.qrCodeData = qrCodeData;
         
         await vendor.save();
 
@@ -274,5 +275,4 @@ server.listen(port, function (err) {
 
 
 
-module.exports = User;
-module.exports = Vendor;
+module.exports = {User,Vendor};

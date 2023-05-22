@@ -87,4 +87,12 @@ body {
 }
 
 
+div[id="reader"]{
+    width: 300px;
+    display:none;
 
+}
+
+#price-input, #confirm-button{
+    display: none;
+}

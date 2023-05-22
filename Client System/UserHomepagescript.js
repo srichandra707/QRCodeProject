@@ -29,46 +29,70 @@ document.addEventListener("DOMContentLoaded", function () {
         window.location.href = "UserLogin.html";
     }
 
-    document.querySelector('.qr-button').addEventListener('click', () => {
-        let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
-        scanner.addListener('scan', function (content) {
-            
-            readQRCode(content);
-        });
-        Instascan.Camera.getCameras().then(function (cameras) {
-            if (cameras.length > 0) {
-                scanner.start(cameras[0]);
-            } else {
-                console.error('No cameras found.');
-            }
-        }).catch(function (e) {
-            console.error(e);
-        });
-});
+    var scanButton = document.getElementById('scan-button');
+    var readerDiv = document.getElementById('reader');
+    var priceInput = document.getElementById('price-input');
+    var confirmButton = document.getElementById('confirm-button');
+    var vendorEmail;
+    function onScanSuccess(decodedText, decodedResult) {
+        vendorEmail = JSON.parse(decodedText).email;
+        if (vendorEmail){
+            document.getElementById('scanner-result').innerText = `Vendor: ${vendorEmail}`;
+            priceInput.style.display = 'block';
+            confirmButton.style.display ='block';
+        }else{
+            document.getElementById('scanner-result').innerText=`Invalid QR code`;
+
+        }
+    }
+    function onScanFailure(error) {
+        console.warn(`QR error = ${error}`);
+    }
+
+    var html5QrcodeScanner = new Html5QrcodeScanner(
+        "reader", {fps:10,qrbox:250}, true)
+
+    scanButton.addEventListener('click', function() {
+        readerDiv.style.display = 'block';
+        html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+    });
+
+    confirmButton.addEventListener('click', function(){
+        var price = priceInput.value;
+        if(price){
+            var userEmail = localStorage.getItem('email');
+            var transactionData ={
+                userEmail: userEmail,
+                vendorEmail: vendorEmail,
+                price: price
+            };
+
+            fetch('complete-transaction', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(transactionData),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Transaction success: ',data);
+            })
+            .catch((error)=>{
+                console.error('Transaction error:', error);
+            });
+        }else {
+            alert('Please enter a price');
+        }
+    });
+    
+    
+    
+    
 document.querySelector('#logout-button').addEventListener('click', ()=>{
     localStorage.removeItem('email');
 });
 });
 
 
-// This will be your qr code reading function
-function readQRCode(data) {
-    let transactionData = JSON.parse(data);
-    transactionData.userEmail = localStorage.getItem('email');
-    fetch('/complete-transaction', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', },
-        body: JSON.stringify(transactionData),
-    })
-        .then(response => response.json())
-        .then(data => {
-            if (data.message) {
-                console.log("QR code is scanned");
-                alert(data.message);
-            }
-            // Refresh the page to update the money left
-            location.reload();
-        })
-        .catch(error => console.error('Error:', error));
-}
 

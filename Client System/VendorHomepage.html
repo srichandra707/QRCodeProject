@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <title>Profile Page</title>
     <link rel="stylesheet" href="VendorHomepagestyle.css">
+    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+
     <script src="VendorHomepagescript.js" defer></script>
-    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js" defer></script>
     
 </head>
 <body>
@@ -18,7 +19,7 @@
         <h1>Welcome to QR Code System</h1>
 
         <div class="profile-info">
-            <h2>User Profile</h2>
+            <h2>Vendor Profile</h2>
             <label for="firstName">Name:</label>
             <input type="text" id="firstName" name="firstName" readonly>
 
@@ -29,7 +30,7 @@
             <input type="number" id="price" name="price">
 
             <button class="qr-button">Generate QR-code</button>
-            <div id="qrcode"></div>
+            <div id="qrcode"><canvas id="qrcode-canvas"></canvas></div>
             <div id="logout"><button id="logout-button"><a href = "Homepage.html">Logout</a></button></div>
         </div>
     </div>

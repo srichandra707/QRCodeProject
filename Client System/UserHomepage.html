@@ -1,14 +1,19 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <title>Profile Page</title>
     <link rel="stylesheet" href="UserHomepagestyle.css">
+
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript" defer></script>
+
+
+
     <script src="UserHomepagescript.js" defer></script>
-    <script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
-    
 </head>
+
 <body>
     <div class="money-box" id="balance">
         <span>Money Left:0</span>
@@ -25,9 +30,17 @@
             <label for="email">Email:</label>
             <input type="email" id="email" name="email" readonly>
 
-            <div class="scanner-box><div class="scanner"><button class="qr-button"id="scan-button">Scan QR-Code</button><video id="preview"></video></div>
-            <div id="logout"><button id="logout-button"><a href = "Homepage.html">Logout</a></button></div></div>
+            <div class="scanner-box">
+                <div class="scanner"><button class="qr-button" id="scan-button">Scan QR-Code</button>
+
+                <div id="reader"></div>
+                <div id="scanner-result">No result</div>
+                <input type="number" id="price-input" placeholder="Enter the price" style="display: none;">
+                <button id="confirm-button" style="display: none;">Confirm</button>
+                <div id="logout"><button id="logout-button"><a href="Homepage.html">Logout</a></button></div>
+            </div>
         </div>
     </div>
 </body>
+
 </html>

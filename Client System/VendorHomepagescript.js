@@ -28,6 +28,8 @@ document.addEventListener("DOMContentLoaded", function(){
         window.location.href = "VendorLogin.html";
     }
 
+    
+
     document.querySelector('#logout-button').addEventListener('click', ()=>{
         localStorage.removeItem('email');
     });
@@ -36,27 +38,19 @@ document.addEventListener("DOMContentLoaded", function(){
 });
 
 
-document.getElementById('price').addEventListener('change', ()=> {
-    let price = document.getElementById('price').value;
-    let email = localStorage.getItem('email');
-    let transactionData = {
-        vendorEmail: email,
-        price: price,
-    };
-    
-    let qrDiv = document.getElementById('qrcode');
-    qrDiv.innerHTML = "";
-
-    let qr = new QRCode(document.querySelector('.qr-button'), {
-        text: JSON.stringify(transactionData),
+document.getElementById('qr-button').addEventListener('click', ()=> {
+    let vendorEmail = localStorage.getItem('email');
+    let qrcode = new QRCode(document.getElementById("qrcode-canvas"), {
+        text: vendorEmail,
         width: 128,
-        height: 128
+        height: 128,
+        colorDark : "#000000",
+        colorLight : "#ffffff",
+        correctLevel : QRCode.CorrectLevel.H
     });
     
    
 });
-
-
 
 
 
