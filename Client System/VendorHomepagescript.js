@@ -33,24 +33,29 @@ document.addEventListener("DOMContentLoaded", function(){
     document.querySelector('#logout-button').addEventListener('click', ()=>{
         localStorage.removeItem('email');
     });
-   
-   
-});
+    document.getElementById('qr-button').addEventListener('click', ()=> {
+        document.getElementById('qrcode').innerHTML = '<div id="qrcode-canvas"></div>';
 
-
-document.getElementById('qr-button').addEventListener('click', ()=> {
-    let vendorEmail = localStorage.getItem('email');
-    let qrcode = new QRCode(document.getElementById("qrcode-canvas"), {
-        text: vendorEmail,
-        width: 128,
-        height: 128,
-        colorDark : "#000000",
-        colorLight : "#ffffff",
-        correctLevel : QRCode.CorrectLevel.H
+        let vendorEmail = localStorage.getItem('email');
+        
+        new QRCode(document.getElementById("qrcode-canvas"), {
+            text: vendorEmail,
+            width: 128,
+            height: 128,
+            colorDark : "#000000",
+            colorLight : "#ffffff",
+            correctLevel : QRCode.CorrectLevel.H
+        });
+        let qrcodeCanvas = document.getElementById("qrcode-canvas");
+        qrcodeCanvas.removeAttribute("title");
+        
+       
     });
-    
    
 });
+
+
+
 
 
 

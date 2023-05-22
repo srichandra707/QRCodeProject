@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var confirmButton = document.getElementById('confirm-button');
     var vendorEmail;
     function onScanSuccess(decodedText, decodedResult) {
-        vendorEmail = JSON.parse(decodedText).email;
+        vendorEmail = decodedText;
         if (vendorEmail){
             document.getElementById('scanner-result').innerText = `Vendor: ${vendorEmail}`;
             priceInput.style.display = 'block';
@@ -76,7 +76,9 @@ document.addEventListener("DOMContentLoaded", function () {
             })
             .then(response => response.json())
             .then(data => {
+                alert("Transaction completed!");
                 console.log('Transaction success: ',data);
+                location.reload();
             })
             .catch((error)=>{
                 console.error('Transaction error:', error);

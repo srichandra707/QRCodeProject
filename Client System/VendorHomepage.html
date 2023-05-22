@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
     <title>Profile Page</title>
     <link rel="stylesheet" href="VendorHomepagestyle.css">
-    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js" defer></script>
 
     <script src="VendorHomepagescript.js" defer></script>
     
@@ -26,11 +26,10 @@
             <label for="email">Email:</label>
             <input type="email" id="email" name="email" readonly>
 
-            <label for="price">Enter Price:</label>
-            <input type="number" id="price" name="price">
+            
 
-            <button class="qr-button">Generate QR-code</button>
-            <div id="qrcode"><canvas id="qrcode-canvas"></canvas></div>
+            <button id="qr-button">Generate QR-code</button>
+            <div id="qrcode"><div id="qrcode-canvas"><canvas id="qrcode-canvas"></canvas></div></div>
             <div id="logout"><button id="logout-button"><a href = "Homepage.html">Logout</a></button></div>
         </div>
     </div>
