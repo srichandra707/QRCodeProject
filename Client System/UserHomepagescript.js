@@ -107,14 +107,54 @@ document.addEventListener("DOMContentLoaded", function () {
             alert('Please enter a price');
         }
     });
-    document.querySelector('#transactions').addEventListener('click', () =>{
+    document.querySelector('#transactions').addEventListener('click', () => {
         fetch('/get-transaction-history?userEmail=' + encodeURIComponent(email))
-  .then(response => response.json())
-  .then(transactions => {
-    // Display the transactions on the page
-    console.log(transactions);
-  })
-  .catch(error => console.error(error));
+            .then(response => response.json())
+            .then(transactions => {
+                const transactionList = document.querySelector('#transactionList');
+                transactionList.innerHTML = '';  // clear the list
+                transactions.forEach(transaction => {
+                    const transactionElement = document.createElement('div');
+                    transactionElement.classList.add('transaction');
+
+                    const userEmailElement = document.createElement('p');
+                    userEmailElement.textContent = `User: ${transaction.userEmail}`;
+                    userEmailElement.classList.add('user-email');
+                    transactionElement.appendChild(userEmailElement);
+
+                    const vendorEmailElement = document.createElement('p');
+                    vendorEmailElement.textContent = `Vendor: ${transaction.vendorEmail}`;
+                    vendorEmailElement.classList.add('vendor-email');
+                    transactionElement.appendChild(vendorEmailElement);
+
+                    const priceElement = document.createElement('p');
+                    priceElement.textContent = `Price: ${transaction.price}`;
+                    priceElement.classList.add('price');
+                    transactionElement.appendChild(priceElement);
+
+                    const timestampElement = document.createElement('p');
+                    timestampElement.textContent = `Date: ${new Date(transaction.timestamp).toLocaleString()}`;
+                    timestampElement.classList.add('timestamp');
+                    transactionElement.appendChild(timestampElement);
+
+                    transactionList.appendChild(transactionElement);
+                });
+
+                const scanQRCodeButton = document.querySelector('#scanQRCode');
+
+
+                scanButton.addEventListener('click', () => {
+
+                    const transactionList = document.querySelector('#transactionList');
+
+
+                    transactionList.innerHTML = '';
+                });
+
+
+
+            })
+            .catch(error => console.error(error));
 
     });
 
@@ -124,7 +164,4 @@ document.addEventListener("DOMContentLoaded", function () {
         localStorage.removeItem('email');
     });
 });
-
-
-
 

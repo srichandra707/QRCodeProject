@@ -25,7 +25,7 @@ const saltRounds = 10;
 //getting mongodb modules and initialization
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const {User, Vendor, Transaction} = require('./mongo');
+const { User, Vendor, Transaction } = require('./mongo');
 
 
 
@@ -50,7 +50,7 @@ mongoose.connect('mongodb+srv://lollasrichandra9:1Srichandra9*@cluster.auuzrze.m
 
 //Hashing passwords and handling signup
 const handleSignup1 = async (req, res) => {
-    
+
 
     const { firstName, lastName, email, password, confirmPassword } = req.body;
 
@@ -59,13 +59,13 @@ const handleSignup1 = async (req, res) => {
     }
 
     try {
-        
+
         const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-        
+
         const user = new mongoose.models.User({ firstName, lastName, email, password: hashedPassword });
 
-        
+
         await user.save();
 
         console.log('User registered successfully'); // Log after user is saved
@@ -82,7 +82,7 @@ const handleSignup1 = async (req, res) => {
 };
 
 const handleSignup2 = async (req, res) => {
-    
+
 
     const { firstName, lastName, email, password, confirmPassword } = req.body;
 
@@ -91,14 +91,14 @@ const handleSignup2 = async (req, res) => {
     }
 
     try {
-        
+
         const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-        
+
         const vendor = new mongoose.models.Vendor({ firstName, lastName, email, password: hashedPassword });
         const qrCodeData = await QRCode.toDataURL(email);
         vendor.qrCodeData = qrCodeData;
-        
+
         await vendor.save();
 
         console.log('Vendor registered successfully'); // Log after vendor is saved
@@ -124,8 +124,8 @@ server.use(session({
     resave: false,
     saveUninitialized: true,
     cookie: { secure: false }
-  }));
-  
+}));
+
 
 
 //Handling Login
@@ -133,70 +133,70 @@ const handleLogin1 = async (req, res) => {
     const { email, password } = req.body;
     console.log('Login attempt:', email, password);
 
-    
+
 
     //checking if email exists
     const user = await mongoose.models.User.findOne({ email });
-    
-    
+
+
 
     if (!user) {
         return res.status(404).json({ message: "No user found with this email.Please create an account." });
     }
     console.log('User found: ', user);
 
-    
-    
+
+
     const passwordMatch = await bcrypt.compare(password, user.password);
 
-    
+
     console.log('Passwords match', passwordMatch);
 
     if (!passwordMatch) {
         return res.status(401).json({ message: "Incorrect email/password." });
     }
 
-    
+
     req.session.email = email;
 
-    
+
     return res.status(200).json({ message: "Logged in successfully", redirectUrl: "/UserHomepage.html" });
-    
+
 };
 
 const handleLogin2 = async (req, res) => {
     const { email, password } = req.body;
     console.log('Login attempt:', email, password);
 
-    
+
 
     //checking if email exists
     const vendor = await mongoose.models.Vendor.findOne({ email });
-    
-    
+
+
 
     if (!vendor) {
         return res.status(404).json({ message: "No user found with this email.Please create an account." });
     }
     console.log('Vendor found: ', vendor);
 
-    
-    
+
+
     const passwordMatch = await bcrypt.compare(password, vendor.password);
 
-    
+
     console.log('Passwords match', passwordMatch);
 
     if (!passwordMatch) {
         return res.status(401).json({ message: "Incorrect email/password." });
     }
 
-    
+
     req.session.email = email;
 
-    
+
     return res.status(200).json({ message: "Logged in successfully", redirectUrl: "/VendorHomepage.html" });
-    
+
 };
 
 server.post('/UserLogin', handleLogin1);
@@ -227,15 +227,15 @@ server.post('/vendor-data', async (req, res) => {
 });
 
 
-server.post('/complete-transaction', async (req,res) => {
+server.post('/complete-transaction', async (req, res) => {
     const { vendorEmail, userEmail, price } = req.body;
     console.log("Scanned data recieved");
 
-    const vendor = await mongoose.models.Vendor.findOne({email:vendorEmail});
-    const user = await mongoose.models.User.findOne({email: userEmail});
+    const vendor = await Vendor.findOne({ email: vendorEmail });
+    const user = await User.findOne({ email: userEmail });
 
-    if (!vendor || !user || user.money<price){
-        res.status(400).json({message: 'Transaction couldn\'t be completed' });
+    if (!vendor || !user || user.money < price) {
+        res.status(400).json({ message: 'Transaction couldn\'t be completed' });
         return;
     }
 
@@ -247,24 +247,24 @@ server.post('/complete-transaction', async (req,res) => {
     await user.save();
     await vendor.save();
 
-    res.status(200).json({message: 'Transaction completed successfully'});
     const transaction = new Transaction({
         userEmail,
         vendorEmail,
         price
     });
     transaction.save()
-    .then(()=>console.log('Transactoin saved successfully'))
-    .catch(err=> console.error(err));
+        .then(() => console.log('Transactoin saved successfully'))
+        .catch(err => console.error(err));
+    res.status(200).json({ message: 'Transaction completed successfully', success: true });
 
-    res.json({success:true});
+
 });
 
-server.get('/get-transaction-history', (req,res)=>{
+server.get('/get-transaction-history', (req, res) => {
     const userEmail = req.query.userEmail;
-    Transaction.fin({userEmail})
-    .then(trnsactions=>res.json(transactions))
-    .catch(err=>console.error(err));
+    Transaction.find({ userEmail })
+        .then(transactions => res.json(transactions))
+        .catch(err => console.error(err));
 });
 server.get('/logout', function (req, res, next) {
     if (req.session) {
@@ -290,4 +290,4 @@ server.listen(port, function (err) {
 
 
 
-module.exports = {User,Vendor};
+module.exports = { User, Vendor };

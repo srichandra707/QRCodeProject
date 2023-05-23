@@ -101,6 +101,6 @@ const transactionSchema = new mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model('Transaction', transactionSchema);
+const Transaction = mongoose.model('Transaction', transactionSchema);
 
-module.exports = { User, Vendor };
+module.exports = { User, Vendor, Transaction };

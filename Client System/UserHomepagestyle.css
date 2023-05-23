@@ -108,3 +108,32 @@ button[id="transactions"]{
     justify-content: left;
     align-items: center;
 }
+
+.transaction {
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.user-email, .vendor-email, .price, .timestamp {
+    margin: 0;
+}
+
+.user-email {
+    color: #007BFF;
+}
+
+.vendor-email {
+    color: #6C757D;
+}
+
+.price {
+    color: #28A745;
+}
+
+.timestamp {
+    color: #6C757D;
+    font-size: 0.8em;
+}
