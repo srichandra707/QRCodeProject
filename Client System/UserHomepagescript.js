@@ -34,7 +34,13 @@ document.addEventListener("DOMContentLoaded", function () {
     var priceInput = document.getElementById('price-input');
     var confirmButton = document.getElementById('confirm-button');
     var vendorEmail;
+
+    var transactionList = document.querySelector('#transactionList');
+    
     function onScanSuccess(decodedText, decodedResult) {
+
+        transactionList.innerHTML = '';  
+
         vendorEmail = decodedText;
         if (vendorEmail) {
             document.getElementById('scanner-result').innerText = `Vendor: ${vendorEmail}`;
@@ -98,6 +104,9 @@ document.addEventListener("DOMContentLoaded", function () {
                             console.error('Transaction history update error:', error);
                         });
                     location.reload();
+                    readerDiv.style.display='none';
+                    priceInput.style.display='none';
+                    confirmButton.style.display='none';
                 })
                 .catch((error) => {
                     console.error('Transaction error:', error);
